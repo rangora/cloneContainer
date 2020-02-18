@@ -1,4 +1,4 @@
-/** 배열을 이용한 리스트 구현.(C style) **/
+/** clone Vector container of STL vector **/
 #include <iostream>
 #include "Vector.h"
 
@@ -6,11 +6,15 @@ using namespace std;
 
 
 int main() {
-//    List<int>* vec = new Vector<int>;
+
     Vector<int> vec;
-    vec.listInsert(1);
-    vec.listInsert(2);
-//    vec.listShow();
+//    vec.reserve(2);
+    vec.push_back(1);
+    vec.push_back(2);
+    vec.push_back(2);
+    vec.push_back(4);
+    vec.push_back(5);
+    vec.showAll();
 
     return 0;
 }

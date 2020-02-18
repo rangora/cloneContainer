@@ -7,79 +7,82 @@ using namespace std;
 
 template <typename T>
 struct Node {
-    Node(T aData = 0) : data(aData), next(nullptr) {};
+    Node(T aData) : data(aData) {};
     T data;
-    Node<T>* next;
 };
 
 template <typename T>
 class Vector {
     private:
-        T* _v;
+        Node<T>* _v;
         size_t _capacity;
         size_t _size;
 
-        Node<T>* head;
-        Node<T>* tail;
-        Node<T>* front;
-        Node<T>* pre_back;
-        Node<T>* back;
+        Node<T>* _begin;
+        Node<T>* _end;
 
     public:
         Vector();
         virtual ~Vector();
 
-        void listInsert(T ele);
-        void listDelete();
-        void listShow();
-
+        void showAll();
         void reserve(size_t capacity);
+        void push_back(T ele);
+        void listDelete();
+
         void pop_back();
+
+        Node<T>& operator=(Node<T>& rhs);
 
     private:
 };
 
+template <class T>
+void Vector<T>::showAll() {
+    auto iter = _v;
+    while(iter != _end)
+        cout << (iter++)->data << " ";
+    putchar('\n');
+    cout << _size << endl;
+    cout << _capacity << endl;
+}
 
 template <class T>
-void Vector<T>::listInsert(T ele) {
-    Node<T>* newNode = new Node<T>{ele};
+Node<T>& Vector<T>::operator=(Node<T>& rhs) {
+    this.data = rhs.data;
+    this.next = rhs.next;
+}
 
-    // first..
-    if(head->next == nullptr) {
-        head->next = newNode;
-        back = front = newNode;
+template <class T>
+void Vector<T>::reserve(size_t capacity) {
+    _v = (Node<T>*)malloc(sizeof(Node<T>) * capacity + 1);
+    _capacity = capacity;
+    _end = _v + _capacity;
+}
+
+template <class T>
+void Vector<T>::push_back(T ele) {
+    if(!_capacity) reserve(1);
+    else if(_size >= _capacity) {
+        _capacity = _capacity * 2 + 1;
+        _v = (Node<T>*)realloc(_v, sizeof(Node<T>) * _capacity);
+        _end = _v + _capacity;
     }
-    // other..
-    else {
-        pre_back = back;
-        back->next = newNode;
-        back = newNode;
-        back->next = tail;
-    }
-    _size++;
+
+    _v[_size++].data = ele;
 }
 
 template <class T>
 void Vector<T>::listDelete() {
-    auto iter = head->next;
-
-    while(iter != tail) {
-        cout << iter->data << " ";
-        iter = iter->next;
-    }
-    cout << endl;
 }
 
 template <class T>
-Vector<T>::Vector() : _size(0) {
-    head = new Node<T>;
-    tail = new Node<T>;
+Vector<T>::Vector() : _size(0), _capacity(0) {
 }
 
 template <class T>
 Vector<T>::~Vector() {
-    delete front;
-    delete back;
+    delete _v;
 }
 
 #endif // VECTOR_H
