@@ -14,10 +14,9 @@ struct Node {
 template <typename T>
 class Vector {
     private:
-        Node<T>* _v;
         size_t _capacity;
         size_t _size;
-
+        Node<T>* _v;
         Node<T>* _begin;
         Node<T>* _end;
 
@@ -28,14 +27,34 @@ class Vector {
         void showAll();
         void reserve(size_t capacity);
         void push_back(T ele);
-        void listDelete();
-
         void pop_back();
+        bool empty();
+        void resize(size_t size);
+        T at(size_t border);
 
         Node<T>& operator=(Node<T>& rhs);
-
-    private:
 };
+
+template <class T>
+T Vector<T>::at(size_t border) {
+    if(border > _capacity || border < 0) {
+        throw out_of_range("out of index");
+    }
+    return _v[border].data;
+}
+
+template <class T>
+void Vector<T>::resize(size_t size) {
+    if(size > _capacity)
+        reserve(size);
+    else
+        _size = size;
+}
+
+template <class T>
+bool Vector<T>::empty() {
+    return _size > 0 ? true : false;
+}
 
 template <class T>
 void Vector<T>::showAll() {
@@ -66,14 +85,10 @@ void Vector<T>::push_back(T ele) {
     else if(_size >= _capacity) {
         _capacity = _capacity * 2 + 1;
         _v = (Node<T>*)realloc(_v, sizeof(Node<T>) * _capacity);
-        _end = _v + _capacity;
     }
 
     _v[_size++].data = ele;
-}
-
-template <class T>
-void Vector<T>::listDelete() {
+    _end = _v + _size;
 }
 
 template <class T>
